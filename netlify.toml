@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NEXT_ENABLE_EXPERIMENTAL_TURBO = "false"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[context.production.environment]
+  # Ensure Clerk secret key is available
+  CLERK_SECRET_KEY = "sk_test_z16iN41ntqu9GBwjmdCtQ6AT86zte8jqJi7vwX0Bsk"
