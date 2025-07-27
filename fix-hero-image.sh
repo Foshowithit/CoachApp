@@ -1,3 +1,14 @@
+#!/bin/bash
+
+# Fix the hero image CodeFlex text
+
+echo "🎨 Fixing hero image text..."
+echo "==========================="
+
+cd ~/Downloads/CoachApp
+
+# Update the home page to add an overlay that hides the CodeFlex text
+cat > src/app/page-updated.tsx << 'EOF'
 import TerminalOverlay from "@/components/TerminalOverlay";
 import { Button } from "@/components/ui/button";
 import UserPrograms from "@/components/UserPrograms";
@@ -129,3 +140,15 @@ const HomePage = () => {
   );
 };
 export default HomePage;
+EOF
+
+# Replace the original file
+mv src/app/page-updated.tsx src/app/page.tsx
+
+echo "✅ Hero image fixed!"
+echo ""
+echo "Changes made:"
+echo "1. Added dark overlay to hide CodeFlex text"
+echo "2. Added 'PERFORMANCE' badge as replacement"
+echo ""
+echo "Refresh your browser to see the changes!"
