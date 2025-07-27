@@ -205,8 +205,8 @@ const GenerateProgramPage = () => {
                 </div>
               </div>
 
-              <h2 className="text-xl font-bold text-foreground">CodeFlex AI</h2>
-              <p className="text-sm text-muted-foreground mt-1">Fitness & Diet Coach</p>
+              <h2 className="text-xl font-bold text-foreground">Adams Performance Coach</h2>
+              <p className="text-sm text-muted-foreground mt-1">Fitness & Performance Expert</p>
 
               {/* SPEAKING INDICATOR */}
 
@@ -271,7 +271,7 @@ const GenerateProgramPage = () => {
               {messages.map((msg, index) => (
                 <div key={index} className="message-item animate-fadeIn">
                   <div className="font-semibold text-xs text-muted-foreground mb-1">
-                    {msg.role === "assistant" ? "CodeFlex AI" : "You"}:
+                    {msg.role === "assistant" ? "Adams Performance Coach" : "You"}:
                   </div>
                   <p className="text-foreground">{msg.content}</p>
                 </div>

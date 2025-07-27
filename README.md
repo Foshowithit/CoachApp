@@ -1,6 +1,6 @@
-# CoachApp 🏋️‍♂️
+# Adams Performance Coaching 🏋️‍♂️
 
-An enhanced AI fitness coach with integrated compound knowledge system.
+Professional performance coaching platform with integrated compound knowledge system.
 
 ## Features
 - AI Voice Coach for personalized fitness plans

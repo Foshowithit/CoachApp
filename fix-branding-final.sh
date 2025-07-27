@@ -1,3 +1,19 @@
+#!/bin/bash
+
+# Fix remaining branding issues
+
+echo "🔧 Fixing remaining branding issues..."
+echo "===================================="
+
+cd ~/Downloads/CoachApp
+
+# 1. Update layout.tsx - Remove "Get Strong"
+echo "📝 Updating layout title..."
+sed -i '' 's/Adams Performance Coaching - Get Strong/Adams Performance Coaching/g' src/app/layout.tsx
+
+# 2. Update Navbar.tsx - Replace codeflex.ai with Adams Performance Coaching
+echo "📝 Updating Navbar..."
+cat > src/components/Navbar.tsx << 'EOF'
 "use client";
 
 import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
@@ -79,3 +95,12 @@ const Navbar = () => {
   );
 };
 export default Navbar;
+EOF
+
+echo "✅ Branding fixes complete!"
+echo ""
+echo "Changes made:"
+echo "1. Removed 'Get Strong' from page title"
+echo "2. Changed 'codeflex.ai' to 'Adams Performance Coaching' in navbar"
+echo ""
+echo "Please refresh your browser to see the changes!"
