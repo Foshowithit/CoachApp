@@ -1,3 +1,14 @@
+#!/bin/bash
+
+# Remove the hero image and replace with a clean design
+
+echo "🎨 Removing hero image..."
+echo "========================"
+
+cd ~/Downloads/CoachApp
+
+# Update the page to remove the image
+cat > src/app/page.tsx << 'EOF'
 import TerminalOverlay from "@/components/TerminalOverlay";
 import { Button } from "@/components/ui/button";
 import UserPrograms from "@/components/UserPrograms";
@@ -130,4 +141,13 @@ const HomePage = () => {
   );
 };
 export default HomePage;
-// Last updated: Sun Jul 27 21:56:19 EDT 2025
+EOF
+
+echo "✅ Hero image removed!"
+echo ""
+echo "Replaced with:"
+echo "- Clean feature cards"
+echo "- AI-Powered, Goal-Focused, Performance Tracking"
+echo "- Adams Performance badge"
+echo ""
+echo "Refresh your browser to see the new design!"

@@ -1,3 +1,14 @@
+#!/bin/bash
+
+# Complete fix - remove all CodeFlex branding
+
+echo "🔧 Removing ALL CodeFlex branding..."
+echo "===================================="
+
+cd ~/Downloads/CoachApp
+
+# 1. Update Footer to remove codeflex.ai
+cat > src/components/Footer.tsx << 'EOF'
 import { Activity } from "lucide-react";
 import Link from "next/link";
 
@@ -75,3 +86,40 @@ const Footer = () => {
   );
 };
 export default Footer;
+EOF
+
+# 2. Check for any remaining hero image references
+echo "Checking for hero image references..."
+find src -type f -name "*.tsx" -o -name "*.ts" | xargs grep -l "hero-ai" || echo "No hero image references found in code"
+
+# 3. Rename the problematic images to prevent them from being used
+cd public
+mv hero-ai.png hero-ai-old.png 2>/dev/null || true
+mv hero-ai2.png hero-ai2-old.png 2>/dev/null || true
+mv hero-ai3.png hero-ai3-old.png 2>/dev/null || true
+cd ..
+
+# 4. Add timestamp to force rebuild
+echo "// Last updated: $(date)" >> src/app/page.tsx
+
+# 5. Commit everything
+git add -A
+git commit -m "[CRITICAL FIX] Remove ALL CodeFlex branding
+
+- Updated Footer to show Adams Performance Coaching
+- Removed all codeflex.ai references
+- Renamed hero images to prevent loading
+- Complete rebrand"
+
+# 6. Push to GitHub
+git push origin main
+
+echo ""
+echo "✅ ALL CodeFlex branding removed!"
+echo ""
+echo "Changes made:"
+echo "1. Footer now shows 'Adams Performance Coaching'"
+echo "2. Copyright updated"
+echo "3. Hero images renamed to prevent loading"
+echo ""
+echo "IMPORTANT: In Netlify, do a 'Clear cache and deploy site'"

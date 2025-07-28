@@ -1,0 +1,26 @@
+/* Add this CSS to completely hide the CodeFlex text */
+
+/* Custom CSS to hide CodeFlex on hero image */
+.hero-image-fix {
+  position: relative;
+}
+
+.hero-image-fix::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 80px;
+  background: #0a0a0f; /* Dark background color */
+  border-radius: 8px;
+  z-index: 5;
+}
+
+/* Alternative: Just crop the image to hide the bottom part */
+.hero-image-crop {
+  position: relative;
+  overflow: hidden;
+  height: 90%; /* Crop bottom 10% */
+}
