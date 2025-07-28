@@ -1,3 +1,14 @@
+#!/bin/bash
+
+# Update the home page text to better reflect the human-like AI coach
+
+echo "🎯 Updating homepage messaging..."
+echo "================================"
+
+cd ~/Downloads/CoachApp
+
+# Update the home page with new messaging
+cat > src/app/page-update.tsx << 'EOF'
 import TerminalOverlay from "@/components/TerminalOverlay";
 import { Button } from "@/components/ui/button";
 import UserPrograms from "@/components/UserPrograms";
@@ -126,3 +137,31 @@ const HomePage = () => {
 };
 export default HomePage;
 // Last updated: $(date)
+EOF
+
+# Replace the current page
+mv src/app/page-update.tsx src/app/page.tsx
+
+# Also update the generate program page description
+sed -i '' 's/Have a voice conversation with our AI assistant to create your personalized plan/Have a conversation with our expert coach to create your personalized plan/g' src/app/generate-program/page.tsx
+
+# Commit changes
+git add -A
+git commit -m "Update messaging to emphasize expert coaching knowledge
+
+- Changed 'AI Technology' to 'Expert Coaching'
+- Emphasized knowledge from top athletic/health/medical experts
+- More human-focused messaging
+- Professional coaching approach"
+
+# Push to GitHub
+git push origin main
+
+echo "✅ Messaging updated!"
+echo ""
+echo "Changes:"
+echo "- Title: 'Transform Your Body With Expert Coaching'"
+echo "- Description emphasizes top expert knowledge"
+echo "- More human, less tech-focused"
+echo ""
+echo "Vercel will auto-deploy in ~1 minute"

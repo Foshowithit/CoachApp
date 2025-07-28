@@ -1,3 +1,14 @@
+#!/bin/bash
+
+# Add new hero image and update the site
+
+echo "🎨 Adding new hero image to the site..."
+echo "======================================"
+
+cd ~/Downloads/CoachApp
+
+# First, let's update the home page to use an image again with the new one
+cat > src/app/page.tsx << 'EOF'
 import TerminalOverlay from "@/components/TerminalOverlay";
 import { Button } from "@/components/ui/button";
 import UserPrograms from "@/components/UserPrograms";
@@ -23,10 +34,11 @@ const HomePage = () => {
                   <span className="text-primary">Your Body</span>
                 </div>
                 <div className="pt-2">
-                  <span className="text-foreground">With Expert</span>
+                  <span className="text-foreground">With Advanced</span>
                 </div>
                 <div className="pt-2">
-                  <span className="text-primary">Coaching</span>
+                  <span className="text-foreground">AI</span>
+                  <span className="text-primary"> Technology</span>
                 </div>
               </h1>
 
@@ -34,8 +46,8 @@ const HomePage = () => {
               <div className="h-px w-full bg-gradient-to-r from-primary via-secondary to-primary opacity-50"></div>
 
               <p className="text-xl text-muted-foreground w-2/3">
-                Talk to our coach trained on knowledge from the top experts in athletic performance, 
-                health, and medical science
+                Talk to our AI assistant and get personalized diet plans and workout routines
+                designed just for you
               </p>
 
               {/* STATS */}
@@ -126,3 +138,20 @@ const HomePage = () => {
 };
 export default HomePage;
 // Last updated: $(date)
+EOF
+
+echo ""
+echo "✅ Home page updated to use new image!"
+echo ""
+echo "Next steps:"
+echo "1. Save the muscular figure image as 'hero-athlete.png'"
+echo "2. Add it to the public folder"
+echo "3. Commit and push:"
+echo "   git add -A"
+echo "   git commit -m 'Add new hero athlete image'"
+echo "   git push origin main"
+echo ""
+echo "The image will display with:"
+echo "- Cyberpunk scan lines overlay"
+echo "- 'Adams Performance' badge"
+echo "- No CodeFlex branding!"
