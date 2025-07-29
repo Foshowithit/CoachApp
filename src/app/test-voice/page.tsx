@@ -65,8 +65,8 @@ export default function TestVoicePage() {
       console.log("🤖 Using Assistant ID:", process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID);
       
       // Add error handling for connection
-      vapi.on("connection-state", (state) => {
-        console.log("📡 Connection state:", state);
+      vapi.on("error", (error) => {
+        console.log("📡 Connection error:", error);
       });
       
       const result = await vapi.start(process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID!);
