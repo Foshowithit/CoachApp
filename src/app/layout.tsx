@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     siteName: "Adams Performance Coaching",
     images: [
       {
-        url: "/hero-athlete.png",
+        url: "/og-hero-image.png",
         width: 1200,
         height: 630,
         alt: "Adams Performance Coaching - Transform Your Body",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Transform Your Body With Expert Coaching",
     description: "Talk to our coach trained on knowledge from the top experts in athletic performance, health, and medical science.",
-    images: ["/hero-athlete.png"],
+    images: ["/og-hero-image.png"],
   },
   robots: {
     index: true,
