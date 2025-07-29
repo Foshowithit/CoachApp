@@ -74,9 +74,13 @@ export default function TestVoicePage() {
       
     } catch (error) {
       console.error("💥 Failed to start call:", error);
-      console.error("💥 Error stack:", error.stack);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorStack = error instanceof Error ? error.stack : undefined;
+      if (errorStack) {
+        console.error("💥 Error stack:", errorStack);
+      }
       setConnecting(false);
-      alert(`Call failed: ${error.message || error}`);
+      alert(`Call failed: ${errorMessage}`);
     }
   };
 
