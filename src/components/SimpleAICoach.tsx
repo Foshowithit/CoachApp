@@ -40,7 +40,12 @@ const SimpleAICoach = () => {
 
     try {
       // Initialize Gemini with your API key
-      const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY!);
+      const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+      if (!apiKey) {
+        throw new Error("GEMINI_API_KEY_MISSING");
+      }
+      
+      const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       // Build context with conversation history
@@ -66,10 +71,14 @@ const SimpleAICoach = () => {
       
       let errorMessage = "I apologize, but I'm having trouble responding right now.";
       
-      if (error.message?.includes("API_KEY_INVALID")) {
-        errorMessage = "There's an issue with the API configuration. Please try again later.";
-      } else if (error.message?.includes("RATE_LIMIT_EXCEEDED")) {
+      if (error.message?.includes("GEMINI_API_KEY_MISSING")) {
+        errorMessage = "AI service is temporarily unavailable. Please try again later.";
+      } else if (error.message?.includes("API_KEY_INVALID") || error.message?.includes("400")) {
+        errorMessage = "AI service is temporarily unavailable. Please try again later.";
+      } else if (error.message?.includes("RATE_LIMIT_EXCEEDED") || error.message?.includes("429")) {
         errorMessage = "Too many requests. Please wait a moment and try again.";
+      } else if (error.message?.includes("quota") || error.message?.includes("403")) {
+        errorMessage = "AI service is temporarily unavailable due to high demand.";
       }
       
       setMessages(prev => [...prev, {
