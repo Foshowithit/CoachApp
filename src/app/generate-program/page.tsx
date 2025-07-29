@@ -128,7 +128,11 @@ const GenerateProgramPage = () => {
         console.log("Calling vapi.start with assistant ID:", process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID);
 
         // Start with assistant ID (not workflow ID - workflows are for phone calls)
-        await vapi.start(process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID!);
+        const assistantId = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID;
+        if (!assistantId) {
+          throw new Error("VAPI Assistant ID not configured. Please set NEXT_PUBLIC_VAPI_ASSISTANT_ID in environment variables.");
+        }
+        await vapi.start(assistantId);
       } catch (error) {
         console.error("Failed to start call", error);
         console.error("Error details:", JSON.stringify(error, null, 2));
@@ -194,7 +198,11 @@ const GenerateProgramPage = () => {
                   <img
                     src="/dark-muscle-figure.webp"
                     alt="Adams Performance Coach"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
+                    onError={(e) => {
+                      console.error("Failed to load avatar image");
+                      e.currentTarget.style.display = 'none';
+                    }}
                   />
                 </div>
               </div>
