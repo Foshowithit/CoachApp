@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Send, Bot, User, Loader2 } from "lucide-react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { supabase, ChatMessage, UserContext } from "@/lib/supabase";
+import { supabase, UserContext } from "@/lib/supabase";
 
 interface Message {
   role: "user" | "assistant";
@@ -22,7 +22,6 @@ const SupabaseAICoach = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => `session_${Date.now()}`);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [userContext, setUserContext] = useState<UserContext | null>(null);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -35,21 +34,18 @@ const SupabaseAICoach = () => {
       loadUserContext();
       loadChatHistory();
     }
-  }, [user?.id]);
+  }, [user?.id, loadUserContext, loadChatHistory]);
 
   const loadUserContext = async () => {
     if (!user?.id) return;
 
     try {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('user_contexts')
         .select('*')
         .eq('user_id', user.id)
         .single();
 
-      if (data) {
-        setUserContext(data);
-      }
     } catch (error) {
       console.log("No existing user context found");
     }
@@ -59,7 +55,7 @@ const SupabaseAICoach = () => {
     if (!user?.id) return;
 
     try {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('chat_messages')
         .select('*')
         .eq('user_id', user.id)
@@ -99,25 +95,19 @@ const SupabaseAICoach = () => {
     if (!user?.id) return;
 
     try {
-      const { data, error } = await supabase
+      await supabase
         .from('user_contexts')
         .upsert({
           user_id: user.id,
           ...updates,
           last_updated: new Date().toISOString(),
-        })
-        .select()
-        .single();
-
-      if (data) {
-        setUserContext(data);
-      }
+        });
     } catch (error) {
       console.error("Error updating user context:", error);
     }
   };
 
-  const extractInsights = async (userMessage: string, aiResponse: string) => {
+  const extractInsights = async (userMessage: string) => {
     if (!user?.id) return;
 
     // Extract fitness goals
@@ -226,7 +216,7 @@ Provide expert fitness coaching advice. Be encouraging, knowledgeable, and speci
       await saveMessage(aiMessage);
 
       // Extract insights and update knowledge
-      await extractInsights(input, text);
+      await extractInsights(input);
 
       // Add to knowledge base if valuable fitness info
       if (text.includes("exercise") || text.includes("workout") || text.includes("nutrition")) {

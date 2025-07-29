@@ -64,7 +64,7 @@ const AICoachChat = () => {
     }
   }, [chatHistory]);
 
-  const extractInsights = async (userMessage: string, aiResponse: string) => {
+  const extractInsights = async (userMessage: string) => {
     // Extract fitness goals
     const goalPatterns = [
       /want to (lose|gain|build|improve) (\w+)/gi,
@@ -172,7 +172,7 @@ Provide expert fitness coaching advice. Be encouraging, knowledgeable, and speci
       });
 
       // Extract insights and update knowledge
-      await extractInsights(input, response.text());
+      await extractInsights(input);
 
       // Add to knowledge base if the response contains valuable fitness info
       if (response.text().includes("exercise") || 
@@ -191,7 +191,7 @@ Provide expert fitness coaching advice. Be encouraging, knowledgeable, and speci
     } catch (error: any) {
       console.error("Error sending message:", error);
       
-      let errorMessage = "I apologize, but I'm having trouble connecting right now.";
+      let errorMessage = "I apologize, but I&apos;m having trouble connecting right now.";
       
       if (error.message?.includes("API key")) {
         errorMessage = "The Gemini API key appears to be invalid. Please check the configuration.";
@@ -237,7 +237,7 @@ Provide expert fitness coaching advice. Be encouraging, knowledgeable, and speci
               <Bot className="w-16 h-16 mx-auto text-primary mb-4" />
               <p className="text-muted-foreground mb-2">Welcome to Adams Performance Coaching!</p>
               <p className="text-sm text-muted-foreground">
-                I'm here to help you achieve your fitness goals. Ask me anything about workouts, nutrition, or recovery.
+                I&apos;m here to help you achieve your fitness goals. Ask me anything about workouts, nutrition, or recovery.
               </p>
             </div>
           )}

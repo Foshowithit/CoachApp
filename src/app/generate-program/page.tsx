@@ -124,9 +124,6 @@ const GenerateProgramPage = () => {
           return;
         }
 
-        const fullName = user?.firstName
-          ? `${user.firstName} ${user.lastName || ""}`.trim()
-          : "There";
 
         console.log("Calling vapi.start with assistant ID:", process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID);
 

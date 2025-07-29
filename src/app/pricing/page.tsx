@@ -4,11 +4,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Star, Users, Calendar, MessageCircle, Video, Zap, Coins } from "lucide-react";
+import { Check, Star, Users, Calendar, MessageCircle, Video, Coins } from "lucide-react";
 
 const PricingPage = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [showBulkPricing, setShowBulkPricing] = useState(false);
 
   const plans = [
     {
@@ -102,7 +101,7 @@ const PricingPage = () => {
               <span className="text-primary">💎 Private Coaching 💎</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              I've had a lot of coaching inquiries lately so I'd like to make a public announcement regarding coaching. 
+              I&apos;ve had a lot of coaching inquiries lately so I&apos;d like to make a public announcement regarding coaching. 
               Obviously I provide plenty of resources for you to learn how to transform yourself, but for people who want 
               more personalized advice and more 1-on-1 time spent with me helping them plan their ascension, this is for you.
             </p>
@@ -219,7 +218,7 @@ const PricingPage = () => {
                 </div>
                 <p className="text-lg text-muted-foreground mb-6">
                   I provide larger discounts for bulk packages if paid through crypto (I accept almost any crypto).
-                  DM me if you're considering this.
+                  DM me if you&apos;re considering this.
                 </p>
               </div>
               

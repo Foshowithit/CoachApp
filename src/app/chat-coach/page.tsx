@@ -28,7 +28,7 @@ const ChatCoachPage = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages.length]);
 
   // Initial greeting
   useEffect(() => {
