@@ -6,8 +6,36 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Adams Performance Coaching",
-  description: "Professional fitness coaching and performance optimization platform.",
+  title: "Adams Performance Coaching | Transform Your Body With Expert Coaching",
+  description: "Transform Your Body With Expert Coaching. Talk to our coach trained on knowledge from the top experts in athletic performance, health, and medical science. Get personalized fitness programs, nutrition guidance, and hormone optimization protocols.",
+  keywords: "fitness coaching, bodybuilding, performance optimization, hormone optimization, TRT, nutrition, workout programs, personal trainer",
+  authors: [{ name: "Adams Performance Coaching" }],
+  openGraph: {
+    title: "Transform Your Body With Expert Coaching",
+    description: "Talk to our coach trained on knowledge from the top experts in athletic performance, health, and medical science. Get personalized fitness programs and advanced protocols.",
+    url: "https://coach-app-roan.vercel.app",
+    siteName: "Adams Performance Coaching",
+    images: [
+      {
+        url: "/hero-athlete.png",
+        width: 1200,
+        height: 630,
+        alt: "Adams Performance Coaching - Transform Your Body",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Transform Your Body With Expert Coaching",
+    description: "Talk to our coach trained on knowledge from the top experts in athletic performance, health, and medical science.",
+    images: ["/hero-athlete.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
