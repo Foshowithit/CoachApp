@@ -101,9 +101,7 @@ const PricingPage = () => {
               <span className="text-primary">💎 Private Coaching 💎</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              I&apos;ve had a lot of coaching inquiries lately so I&apos;d like to make a public announcement regarding coaching. 
-              Obviously I provide plenty of resources for you to learn how to transform yourself, but for people who want 
-              more personalized advice and more 1-on-1 time spent with me helping them plan their ascension, this is for you.
+              For people who want more personalized advice and more 1-on-1 time spent with me helping them plan their ascension, this is for you.
             </p>
           </div>
 
