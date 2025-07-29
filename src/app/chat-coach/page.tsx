@@ -40,7 +40,7 @@ const ChatCoachPage = () => {
       };
       setMessages([greeting]);
     }
-  }, [user]);
+  }, [user, messages.length]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

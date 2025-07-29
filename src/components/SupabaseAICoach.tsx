@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,22 +36,21 @@ const SupabaseAICoach = () => {
     }
   }, [user?.id, loadUserContext, loadChatHistory]);
 
-  const loadUserContext = async () => {
+  const loadUserContext = useCallback(async () => {
     if (!user?.id) return;
 
     try {
-      const { data } = await supabase
+      await supabase
         .from('user_contexts')
         .select('*')
         .eq('user_id', user.id)
         .single();
-
-    } catch (error) {
+    } catch {
       console.log("No existing user context found");
     }
-  };
+  }, [user?.id]);
 
-  const loadChatHistory = async () => {
+  const loadChatHistory = useCallback(async () => {
     if (!user?.id) return;
 
     try {
@@ -70,10 +69,10 @@ const SupabaseAICoach = () => {
         }));
         setMessages(chatMessages);
       }
-    } catch (error) {
+    } catch {
       console.log("No chat history found");
     }
-  };
+  }, [user?.id]);
 
   const saveMessage = async (message: Message) => {
     if (!user?.id) return;

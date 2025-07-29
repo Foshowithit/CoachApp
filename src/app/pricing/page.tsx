@@ -302,7 +302,7 @@ const PricingPage = () => {
                 </div>
                 <h3 className="font-bold mb-2">Advanced Supplementation</h3>
                 <p className="text-sm text-muted-foreground">
-                  Access to cutting-edge compounds and protocols most coaches don't know about or understand.
+                  Access to cutting-edge compounds and protocols most coaches don&apos;t know about or understand.
                 </p>
               </Card>
 
