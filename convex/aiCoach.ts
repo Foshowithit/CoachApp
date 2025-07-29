@@ -9,7 +9,7 @@ export const getChatHistory = query({
     if (args.sessionId) {
       return await ctx.db
         .query("coachChats")
-        .withIndex("by_session", (q) => q.eq("sessionId", args.sessionId))
+        .withIndex("by_session", (q) => q.eq("sessionId", args.sessionId!))
         .order("desc")
         .take(10);
     } else {
