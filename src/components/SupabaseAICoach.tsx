@@ -28,14 +28,6 @@ const SupabaseAICoach = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Load user context and chat history
-  useEffect(() => {
-    if (user?.id) {
-      loadUserContext();
-      loadChatHistory();
-    }
-  }, [user?.id, loadUserContext, loadChatHistory]);
-
   const loadUserContext = useCallback(async () => {
     if (!user?.id) return;
 
@@ -73,6 +65,14 @@ const SupabaseAICoach = () => {
       console.log("No chat history found");
     }
   }, [user?.id]);
+
+  // Load user context and chat history
+  useEffect(() => {
+    if (user?.id) {
+      loadUserContext();
+      loadChatHistory();
+    }
+  }, [user?.id, loadUserContext, loadChatHistory]);
 
   const saveMessage = async (message: Message) => {
     if (!user?.id) return;
