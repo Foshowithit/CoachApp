@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tod Lee Knowledge Base Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-2">🎯 Tod Lee Knowledge Base Builder</h1>
+            <p class="text-gray-400">Add video scripts and transcripts to expand the AI coach knowledge</p>
+        </div>
+
+        <!-- Add Content Form -->
+        <div class="bg-gray-800 rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">📝 Add New Video Script</h2>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Video Title (optional)</label>
+                <input 
+                    type="text" 
+                    id="videoTitle" 
+                    placeholder="e.g., Testosterone Protocols Q&A"
+                    class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none"
+                />
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Video Script / Transcript Content</label>
+                <textarea 
+                    id="scriptContent" 
+                    rows="15" 
+                    placeholder="Paste your video script or transcript here..."
+                    class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none font-mono text-sm"
+                ></textarea>
+            </div>
+
+            <div class="flex gap-4">
+                <button 
+                    onclick="addContent()" 
+                    class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium transition-colors"
+                >
+                    ✅ Add to Knowledge Base
+                </button>
+                
+                <button 
+                    onclick="extractProtocols()" 
+                    class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-medium transition-colors"
+                >
+                    🧬 Extract Protocols
+                </button>
+                
+                <button 
+                    onclick="clearForm()" 
+                    class="bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-lg font-medium transition-colors"
+                >
+                    🗑️ Clear
+                </button>
+            </div>
+        </div>
+
+        <!-- Protocol Extraction Results -->
+        <div id="protocolResults" class="bg-gray-800 rounded-lg p-6 mb-8 hidden">
+            <h3 class="text-xl font-bold mb-4">🔍 Extracted Protocols</h3>
+            <div id="protocolContent"></div>
+        </div>
+
+        <!-- Current Knowledge Base -->
+        <div class="bg-gray-800 rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">📊 Current Knowledge Base</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="bg-gray-700 p-4 rounded-lg text-center">
+                    <div id="scriptCount" class="text-2xl font-bold text-blue-400">0</div>
+                    <div class="text-sm text-gray-400">Video Scripts</div>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-lg text-center">
+                    <div id="wordCount" class="text-2xl font-bold text-green-400">0</div>
+                    <div class="text-sm text-gray-400">Total Words</div>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-lg text-center">
+                    <div id="protocolCount" class="text-2xl font-bold text-purple-400">0</div>
+                    <div class="text-sm text-gray-400">Protocols Found</div>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button 
+                    onclick="consolidateKnowledge()" 
+                    class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-medium transition-colors"
+                >
+                    🔄 Rebuild Knowledge Base
+                </button>
+                
+                <button 
+                    onclick="exportKnowledge()" 
+                    class="bg-orange-600 hover:bg-orange-700 px-6 py-3 rounded-lg font-medium transition-colors"
+                >
+                    📁 Export TypeScript File
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent Additions -->
+        <div class="bg-gray-800 rounded-lg p-6">
+            <h2 class="text-2xl font-bold mb-4">📋 Recent Additions</h2>
+            <div id="recentList" class="space-y-2">
+                <div class="text-gray-400 text-center py-4">No scripts added yet</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Knowledge base storage
+        let knowledgeBase = JSON.parse(localStorage.getItem('todLeeKnowledge') || '[]');
+        
+        // Update display
+        function updateStats() {
+            document.getElementById('scriptCount').textContent = knowledgeBase.length;
+            
+            const totalWords = knowledgeBase.reduce((total, item) => {
+                return total + (item.content?.split(/\s+/).length || 0);
+            }, 0);
+            document.getElementById('wordCount').textContent = totalWords.toLocaleString();
+            
+            const protocolCount = knowledgeBase.reduce((total, item) => {
+                const protocols = extractProtocolsFromText(item.content || '');
+                return total + Object.values(protocols).flat().length;
+            }, 0);
+            document.getElementById('protocolCount').textContent = protocolCount;
+        }
+
+        // Add content to knowledge base
+        function addContent() {
+            const title = document.getElementById('videoTitle').value.trim();
+            const content = document.getElementById('scriptContent').value.trim();
+            
+            if (!content) {
+                alert('Please enter script content');
+                return;
+            }
+            
+            const entry = {
+                id: Date.now(),
+                title: title || 'Untitled Script',
+                content: content,
+                dateAdded: new Date().toISOString(),
+                wordCount: content.split(/\s+/).length
+            };
+            
+            knowledgeBase.unshift(entry);
+            localStorage.setItem('todLeeKnowledge', JSON.stringify(knowledgeBase));
+            
+            updateStats();
+            updateRecentList();
+            clearForm();
+            
+            alert('✅ Script added to knowledge base!');
+        }
+
+        // Extract protocols from text
+        function extractProtocolsFromText(text) {
+            const protocols = {
+                testosterone: [],
+                compounds: [],
+                dosages: [],
+                bloodwork: [],
+                training: [],
+                nutrition: []
+            };
+            
+            const lines = text.split('\n');
+            
+            for (const line of lines) {
+                const lowerLine = line.toLowerCase();
+                
+                // Extract testosterone protocols
+                if ((lowerLine.includes('testosterone') || lowerLine.includes('test')) && lowerLine.match(/\d+\s*mg/)) {
+                    protocols.testosterone.push(line.trim());
+                }
+                
+                // Extract compound mentions
+                const compounds = ['tren', 'deca', 'masteron', 'anavar', 'primo', 'eq', 'winstrol', 'anadrol'];
+                for (const compound of compounds) {
+                    if (lowerLine.includes(compound) && lowerLine.match(/\d+\s*mg/)) {
+                        protocols.compounds.push(line.trim());
+                        break;
+                    }
+                }
+                
+                // Extract dosages
+                if (lowerLine.match(/\d+\s*mg|\d+\s*units?\s+gh|\d+\s*iu/)) {
+                    protocols.dosages.push(line.trim());
+                }
+                
+                // Extract bloodwork mentions
+                if ((lowerLine.includes('blood') || lowerLine.includes('lab')) && lowerLine.length < 200) {
+                    protocols.bloodwork.push(line.trim());
+                }
+                
+                // Extract training info
+                if ((lowerLine.includes('train') || lowerLine.includes('reps') || lowerLine.includes('sets')) && lowerLine.length < 200) {
+                    protocols.training.push(line.trim());
+                }
+                
+                // Extract nutrition
+                if ((lowerLine.includes('protein') || lowerLine.includes('carb') || lowerLine.includes('meal')) && lowerLine.length < 200) {
+                    protocols.nutrition.push(line.trim());
+                }
+            }
+            
+            return protocols;
+        }
+
+        // Extract and show protocols
+        function extractProtocols() {
+            const content = document.getElementById('scriptContent').value.trim();
+            
+            if (!content) {
+                alert('Please enter script content first');
+                return;
+            }
+            
+            const protocols = extractProtocolsFromText(content);
+            
+            let html = '';
+            for (const [category, items] of Object.entries(protocols)) {
+                if (items.length > 0) {
+                    html += `<div class="mb-4">
+                        <h4 class="font-bold text-lg mb-2 capitalize">${category.replace('_', ' ')}</h4>
+                        <ul class="space-y-1">
+                            ${items.slice(0, 5).map(item => `<li class="text-sm bg-gray-700 p-2 rounded">${item}</li>`).join('')}
+                        </ul>
+                        ${items.length > 5 ? `<p class="text-xs text-gray-400 mt-1">+${items.length - 5} more...</p>` : ''}
+                    </div>`;
+                }
+            }
+            
+            if (html) {
+                document.getElementById('protocolContent').innerHTML = html;
+                document.getElementById('protocolResults').classList.remove('hidden');
+            } else {
+                document.getElementById('protocolContent').innerHTML = '<p class="text-gray-400">No specific protocols detected in this content.</p>';
+                document.getElementById('protocolResults').classList.remove('hidden');
+            }
+        }
+
+        // Update recent list
+        function updateRecentList() {
+            const recentList = document.getElementById('recentList');
+            
+            if (knowledgeBase.length === 0) {
+                recentList.innerHTML = '<div class="text-gray-400 text-center py-4">No scripts added yet</div>';
+                return;
+            }
+            
+            const html = knowledgeBase.slice(0, 5).map(item => `
+                <div class="bg-gray-700 p-3 rounded-lg">
+                    <div class="font-medium">${item.title}</div>
+                    <div class="text-sm text-gray-400">
+                        ${item.wordCount} words • ${new Date(item.dateAdded).toLocaleDateString()}
+                    </div>
+                </div>
+            `).join('');
+            
+            recentList.innerHTML = html;
+        }
+
+        // Consolidate knowledge base
+        function consolidateKnowledge() {
+            if (knowledgeBase.length === 0) {
+                alert('No content to consolidate');
+                return;
+            }
+            
+            let consolidated = `// Tod Lee Knowledge Base - Consolidated from ${knowledgeBase.length} video scripts
+export const TOD_LEE_KNOWLEDGE = \`
+=== COMPREHENSIVE TOD LEE KNOWLEDGE BASE ===
+Generated: ${new Date().toISOString()}
+Sources: ${knowledgeBase.length} video scripts
+
+`;
+
+            knowledgeBase.forEach(item => {
+                consolidated += `=== ${item.title.toUpperCase()} ===
+Date Added: ${item.dateAdded}
+Word Count: ${item.wordCount}
+
+${item.content}
+
+=== END SCRIPT ===
+
+`;
+            });
+
+            consolidated += `\`;
+
+export function getKnowledgeBasePrompt(userMessage: string): string {
+  return \`You are Tod Lee (Adam), a Pro bodybuilder and performance coach speaking to experienced bodybuilders and fitness enthusiasts.
+
+IMPORTANT: All advice is for research and entertainment purposes only. Always recommend consulting healthcare professionals.
+
+KNOWLEDGE BASE:
+\${TOD_LEE_KNOWLEDGE}
+
+Your personality is direct, technical, and no-nonsense. Give specific protocols, dosages, and real-world advice based on your documented experience. Don't oversimplify - your audience understands bodybuilding concepts.
+
+User message: \${userMessage}\`;
+}`;
+
+            // Store for export
+            localStorage.setItem('consolidatedKnowledge', consolidated);
+            
+            alert('✅ Knowledge base consolidated! Click "Export TypeScript File" to download.');
+        }
+
+        // Export knowledge base
+        function exportKnowledge() {
+            const consolidated = localStorage.getItem('consolidatedKnowledge');
+            
+            if (!consolidated) {
+                alert('Please consolidate the knowledge base first');
+                return;
+            }
+            
+            const blob = new Blob([consolidated], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'knowledge-base.ts';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Clear form
+        function clearForm() {
+            document.getElementById('videoTitle').value = '';
+            document.getElementById('scriptContent').value = '';
+            document.getElementById('protocolResults').classList.add('hidden');
+        }
+
+        // Initialize
+        updateStats();
+        updateRecentList();
+    </script>
+</body>
+</html>

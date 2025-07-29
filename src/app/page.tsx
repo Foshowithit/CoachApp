@@ -15,7 +15,7 @@ const HomePage = () => {
 
             {/* LEFT SIDE CONTENT */}
             <div className="lg:col-span-7 space-y-8 relative">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-fc-fast tracking-tight">
                 <div>
                   <span className="text-foreground">Transform</span>
                 </div>
@@ -85,7 +85,7 @@ const HomePage = () => {
               <div className="relative aspect-square max-w-lg mx-auto">
                 <div className="relative overflow-hidden rounded-lg bg-cyber-black">
                   <img
-                    src="/hero-athlete.png"
+                    src="/dark-muscle-figure.webp"
                     alt="Performance Athlete"
                     className="size-full object-cover object-center"
                   />

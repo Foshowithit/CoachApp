@@ -1,3 +1,7 @@
+/* Font imports must come first */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Audiowide&family=Black+Ops+One&display=swap');
+
+/* Tailwind imports */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -235,4 +239,28 @@
 
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+/* FC Fast Games Style Font Classes */
+.font-fc-fast {
+  font-family: 'Black Ops One', 'Orbitron', cursive;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 10px rgba(24, 206, 242, 0.3);
+}
+
+.font-gaming-header {
+  font-family: 'Orbitron', 'Black Ops One', monospace;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.font-dynamic-title {
+  font-family: 'Audiowide', 'Orbitron', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-shadow: 0 2px 8px rgba(24, 206, 242, 0.4);
 }

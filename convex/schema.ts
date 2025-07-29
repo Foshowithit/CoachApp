@@ -74,4 +74,56 @@ export default defineSchema({
     compoundsExtracted: v.number(),
     status: v.string(),
   }),
+
+  // AI Coach Knowledge Base
+  knowledgeBase: defineTable({
+    topic: v.string(),
+    content: v.string(),
+    category: v.string(), // "fitness", "nutrition", "recovery", "technique"
+    confidence: v.float64(), // 0-1 confidence score
+    sources: v.array(v.string()), // conversation IDs that contributed
+    createdAt: v.float64(),
+    updatedAt: v.float64(),
+  }).index("by_category", ["category"])
+    .index("by_topic", ["topic"]),
+
+  userContexts: defineTable({
+    userId: v.string(),
+    goals: v.array(v.string()),
+    fitnessLevel: v.string(),
+    preferences: v.object({
+      workoutTypes: v.array(v.string()),
+      dietaryRestrictions: v.array(v.string()),
+      equipment: v.array(v.string()),
+    }),
+    currentMetrics: v.object({
+      weight: v.optional(v.float64()),
+      height: v.optional(v.float64()),
+      bodyFat: v.optional(v.float64()),
+    }),
+    injuries: v.array(v.string()),
+    lastUpdated: v.float64(),
+  }).index("by_user", ["userId"]),
+
+  coachChats: defineTable({
+    userId: v.string(),
+    messages: v.array(v.object({
+      role: v.union(v.literal("user"), v.literal("assistant")),
+      content: v.string(),
+      timestamp: v.float64(),
+    })),
+    sessionId: v.string(),
+    createdAt: v.float64(),
+  }).index("by_user", ["userId"])
+    .index("by_session", ["sessionId"]),
+
+  coachInsights: defineTable({
+    userId: v.string(),
+    type: v.string(), // "goal", "progress", "preference", "habit"
+    content: v.string(),
+    confidence: v.float64(),
+    extractedFrom: v.string(), // chat session ID
+    createdAt: v.float64(),
+  }).index("by_user", ["userId"])
+    .index("by_type", ["type"]),
 });

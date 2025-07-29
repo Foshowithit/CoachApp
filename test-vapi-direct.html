@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vapi Direct Test</title>
+</head>
+<body>
+    <h1>Vapi Direct Test</h1>
+    <button id="startCall">Start Call</button>
+    <div id="status">Ready</div>
+    <div id="debug" style="margin-top: 20px; font-family: monospace; background: #f0f0f0; padding: 10px;">
+        Debug info will appear here...
+    </div>
+    
+    <script>
+        const debugLog = (msg) => {
+            console.log(msg);
+            document.getElementById('debug').innerHTML += msg + '<br>';
+        };
+        
+        debugLog('Loading Vapi library...');
+        
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.2.5/dist/vapi.min.js';
+        script.onload = () => {
+            debugLog('Vapi library loaded');
+            
+            try {
+                debugLog('Creating Vapi instance...');
+                debugLog('Vapi available: ' + (typeof window.Vapi));
+                debugLog('Window.vapi: ' + (typeof window.vapi));
+                
+                // Try different ways to access Vapi
+                const VapiClass = window.Vapi || window.vapi || window.default;
+                debugLog('Found Vapi class: ' + (typeof VapiClass));
+                
+                if (typeof VapiClass !== 'function') {
+                    // Check what's actually loaded
+                    debugLog('Window keys: ' + Object.keys(window).filter(k => k.toLowerCase().includes('vapi')).join(', '));
+                    throw new Error('Vapi constructor not found');
+                }
+                
+                const vapi = new VapiClass('88a56cdf-a0ed-42b5-a090-713ed7c58364');
+                debugLog('Vapi instance created');
+                
+                const assistantId = '733fce9e-f751-4257-a23b-8022716de930';
+                
+                document.getElementById('startCall').addEventListener('click', async () => {
+                    debugLog('Button clicked');
+                    
+                    try {
+                        document.getElementById('status').textContent = 'Connecting...';
+                        debugLog('Requesting microphone permission...');
+                        
+                        // Test microphone first
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        debugLog('Microphone permission granted');
+                        stream.getTracks().forEach(track => track.stop());
+                        
+                        debugLog('Setting up event listeners...');
+                        
+                        vapi.on('call-start', () => {
+                            debugLog('EVENT: Call started!');
+                            document.getElementById('status').textContent = 'Call Active';
+                        });
+                        
+                        vapi.on('call-end', () => {
+                            debugLog('EVENT: Call ended');
+                            document.getElementById('status').textContent = 'Call Ended';
+                        });
+                        
+                        vapi.on('error', (error) => {
+                            debugLog('EVENT: Error - ' + JSON.stringify(error));
+                            document.getElementById('status').textContent = 'Error: ' + JSON.stringify(error);
+                        });
+                        
+                        vapi.on('message', (msg) => {
+                            debugLog('EVENT: Message - ' + JSON.stringify(msg));
+                        });
+                        
+                        debugLog('Starting call with assistant: ' + assistantId);
+                        const result = await vapi.start(assistantId);
+                        debugLog('Start result: ' + JSON.stringify(result));
+                        
+                    } catch (error) {
+                        debugLog('ERROR: ' + error.message);
+                        debugLog('Stack: ' + error.stack);
+                        document.getElementById('status').textContent = 'Failed: ' + error.message;
+                    }
+                });
+                
+            } catch (error) {
+                debugLog('Failed to create Vapi: ' + error.message);
+            }
+        };
+        
+        script.onerror = () => {
+            debugLog('Failed to load Vapi library');
+        };
+        
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>

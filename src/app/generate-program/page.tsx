@@ -19,29 +19,7 @@ const GenerateProgramPage = () => {
 
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
-  // SOLUTION to get rid of "Meeting has ended" error
-  useEffect(() => {
-    const originalError = console.error;
-    // override console.error to ignore "Meeting has ended" errors
-    console.error = function (msg, ...args) {
-      if (
-        msg &&
-        (msg.includes("Meeting has ended") ||
-          (args[0] && args[0].toString().includes("Meeting has ended")))
-      ) {
-        console.log("Ignoring known error: Meeting has ended");
-        return; // don't pass to original handler
-      }
-
-      // pass all other errors to the original handler
-      return originalError.call(console, msg, ...args);
-    };
-
-    // restore original handler on unmount
-    return () => {
-      console.error = originalError;
-    };
-  }, []);
+  // Removed problematic console override
 
   // auto-scroll messages
   useEffect(() => {
@@ -128,19 +106,38 @@ const GenerateProgramPage = () => {
         setMessages([]);
         setCallEnded(false);
 
+        // Debug logging
+        console.log("Starting Vapi call...");
+        console.log("Assistant ID:", process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID);
+        console.log("API Key exists:", !!process.env.NEXT_PUBLIC_VAPI_API_KEY);
+        console.log("User:", user);
+
+        // Check microphone permissions
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          console.log("Microphone access granted");
+          stream.getTracks().forEach(track => track.stop()); // Stop the test stream
+        } catch (micError) {
+          console.error("Microphone access denied:", micError);
+          alert("Please allow microphone access to use voice calls");
+          setConnecting(false);
+          return;
+        }
+
         const fullName = user?.firstName
           ? `${user.firstName} ${user.lastName || ""}`.trim()
           : "There";
 
-        await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
-          variableValues: {
-            full_name: fullName,
-            user_id: user?.id,
-          },
-        });
+        console.log("Calling vapi.start with assistant ID:", process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID);
+
+        // Start with assistant ID (not workflow ID - workflows are for phone calls)
+        await vapi.start(process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID!);
       } catch (error) {
-        console.log("Failed to start call", error);
+        console.error("Failed to start call", error);
+        console.error("Error details:", JSON.stringify(error, null, 2));
         setConnecting(false);
+        // Show error to user
+        alert(`Call failed to start: ${error}`);
       }
     }
   };
@@ -198,8 +195,8 @@ const GenerateProgramPage = () => {
                 <div className="relative w-full h-full rounded-full bg-card flex items-center justify-center border border-border overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-secondary/10"></div>
                   <img
-                    src="/ai-avatar.png"
-                    alt="AI Assistant"
+                    src="/dark-muscle-figure.webp"
+                    alt="Adams Performance Coach"
                     className="w-full h-full object-cover"
                   />
                 </div>

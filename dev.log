@@ -1,0 +1,32 @@
+
+> adams-performance-coaching@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.2.4 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.223:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+Slow filesystem detected. If /Users/adamn/Downloads/CoachApp/.next is a network drive, consider moving it to a local folder. If you have an antivirus enabled, consider excluding your project directory.
+ ✓ Compiled in 446ms
+ ✓ Ready in 1353ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.6s
+ ⨯ ./src/app/globals.css:1866:9
+Parsing css source code failed
+[0m [90m 1864 |[39m   }[0m
+[0m [90m 1865 |[39m }[0m
+[0m[31m[1m>[22m[39m[90m 1866 |[39m [33m@[39m[36mimport[39m url([32m'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Audiowide&family=Black+Ops+One&display=swap'[39m)[33m;[39m[0m
+[0m [90m      |[39m         [31m[1m^[22m[39m[0m
+[0m [90m 1867 |[39m [33m:[39mroot {[0m
+[0m [90m 1868 |[39m   [33m--[39mradius[33m:[39m [35m0.625[39mrem[33m;[39m[0m
+[0m [90m 1869 |[39m   [33m--[39mcyber[33m-[39mblack[33m:[39m [33m#[39m[35m000000[39m[33m;[39m[0m
+
+@import rules must precede all rules aside from @charset and @layer statements at [project]/src/app/globals.css:1865:8
+
+
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 585ms
+ GET / 500 in 3963ms
+[?25h
