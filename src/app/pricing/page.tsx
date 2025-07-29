@@ -274,15 +274,6 @@ const PricingPage = () => {
                 </p>
               </Card>
 
-              <Card className="p-6">
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-4">
-                  <Users className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="font-bold mb-2">Technical Background</h3>
-                <p className="text-sm text-muted-foreground">
-                  Software developer turned coach - I understand systems, data, and optimization at a deeper level.
-                </p>
-              </Card>
 
               <Card className="p-6">
                 <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mb-4">
