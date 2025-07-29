@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Star, Users, Calendar, MessageCircle, Video, Coins } from "lucide-react";
+import { Check, Star, Calendar, MessageCircle, Video, Coins } from "lucide-react";
 
 const PricingPage = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
